@@ -1,0 +1,25 @@
+#addProduct_form{
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 30px;
+}
+
+#editProduct_form{
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 30px;
+}
+
+#editButton{
+    margin-left: 360px;
+}
+
+#userdetail_form{
+    width: 60%;
+    margin-left: 20%;
+}
+
+
+#addButton{
+    margin-left: 300px;
+}
