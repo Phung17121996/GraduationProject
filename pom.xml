@@ -15,7 +15,7 @@
         <spring.jpa.version>1.10.2.RELEASE</spring.jpa.version>
         <hibernate.entity.version>5.1.0.Final</hibernate.entity.version>
         <jstl.version>1.2</jstl.version>
-        <mysql.jdbc.version>8.0.1</mysql.jdbc.version>
+        <mysql.jdbc.version>8.0.13</mysql.jdbc.version>
         <webjar.bootstrap.version>3.3.7</webjar.bootstrap.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <spring.security.version>4.1.3.RELEASE</spring.security.version>
