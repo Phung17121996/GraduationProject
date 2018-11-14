@@ -35,22 +35,21 @@ public class UserEntity {
         this.isDel = isDel;
     }
 
+    @Column(name="hashedPass")
+    private String hashedPass;
+
+    @Column(name="keyHash")
+    private  String keyHash;
+
     @ManyToOne
     @JoinColumn(name="roleId")
     private RoleEntity roleEntity;
-
-    @OneToOne(cascade = {CascadeType.ALL})
-    @PrimaryKeyJoinColumn
-    private PasswordEntity passwordEntity;
 
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
     private List<OrdersEntity> ordersEntities;
 
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
     private List<FavouriteEntity> favouriteEntities ;
-
-    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
-    private List<RecentlyEntity> recentlyEntities;
 
     @OneToMany(mappedBy = "userEntity",fetch = FetchType.EAGER)
     private List<MessageEntity> messageEntities;
@@ -98,20 +97,28 @@ public class UserEntity {
         this.phone = phone;
     }
 
+    public String getHashedPass() {
+        return hashedPass;
+    }
+
+    public void setHashedPass(String hashedPass) {
+        this.hashedPass = hashedPass;
+    }
+
+    public String getKeyHash() {
+        return keyHash;
+    }
+
+    public void setKeyHash(String keyHash) {
+        this.keyHash = keyHash;
+    }
+
     public RoleEntity getRoleEntity() {
         return roleEntity;
     }
 
     public void setRoleEntity(RoleEntity roleEntity) {
         this.roleEntity = roleEntity;
-    }
-
-    public PasswordEntity getPasswordEntity() {
-        return passwordEntity;
-    }
-
-    public void setPasswordEntity(PasswordEntity passwordEntity) {
-        this.passwordEntity = passwordEntity;
     }
 
     public List<OrdersEntity> getOrdersEntities() {
@@ -128,14 +135,6 @@ public class UserEntity {
 
     public void setFavouriteEntities(List<FavouriteEntity> favouriteEntities) {
         this.favouriteEntities = favouriteEntities;
-    }
-
-    public List<RecentlyEntity> getRecentlyEntities() {
-        return recentlyEntities;
-    }
-
-    public void setRecentlyEntities(List<RecentlyEntity> recentlyEntities) {
-        this.recentlyEntities = recentlyEntities;
     }
 
     public List<MessageEntity> getMessageEntities() {
