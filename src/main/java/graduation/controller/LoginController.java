@@ -90,6 +90,10 @@ public class LoginController {
                         "\t\t\t\t\t\tonclick=\"window.location.href='favouriteList?userId="+ user.getId()+"'\">My Favourite List</button>\n" +
                         "\t\t\t</li>\n" +
                         "\t\t\t<li>\n" +
+                        "\t\t\t\t<button type=\"button\" class=\"btn btn-link\"\n" +
+                        "\t\t\t\t\t\tonclick=\"window.location.href='recentlyList?userId="+ user.getId()+"'\">My Recently List</button>\n" +
+                        "\t\t\t</li>\n" +
+                        "\t\t\t<li>\n" +
                         "\t\t\t\t<button type=\"button\" class=\"btn btn-link\" \n" +
                         "\t\t\t\t\t\tonclick=\"window.location.href='logOut'\">Log out</button>\n" +
                         "\t\t\t</li>\n" +
