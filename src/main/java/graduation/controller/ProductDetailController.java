@@ -1,17 +1,17 @@
 package graduation.controller;
 
-import graduation.entity.ProductEntity;
-import graduation.entity.SizeEntity;
-import graduation.entity.ViewEntity;
-import graduation.repository.ProductRepository;
-import graduation.repository.SizeRepository;
-import graduation.repository.ViewRepository;
+import graduation.entity.*;
+import graduation.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,12 +22,17 @@ public class ProductDetailController {
     ViewRepository viewRepository;
     @Autowired
     SizeRepository sizeRepository;
+    @Autowired
+    RecentlyReponsitory recentlyReponsitory;
+    @Autowired
+    UserRepository userRepository;
 
-    @RequestMapping(value="product-detail")
+    @RequestMapping(value="product-detail",  method = RequestMethod.GET)
     public String showProductDetailPage(Model model,
-                                        @RequestParam(name="productId") int productId
-    ){
-
+                                        HttpServletRequest request,
+                                        @RequestParam(name="productId") int productId){
+        HttpSession session = request.getSession();
+        UserEntity user = (UserEntity)session.getAttribute("user");
         ViewEntity viewEntity = viewRepository.getViewByProductId(productId);
         viewEntity.setCount(viewEntity.getCount() + 1);
         viewRepository.save(viewEntity);
@@ -56,6 +61,34 @@ public class ProductDetailController {
         model.addAttribute("product",product);
         model.addAttribute("recommendProducts",recommendProducts);
         model.addAttribute("hotProducts",hotProducts);
+
+        //add recently
+        if(user != null) {
+            List<RecentlyEntity> recentlyEntityList = recentlyReponsitory.getRecentlyListByUserId(user.getId());
+            if (recentlyEntityList != null) {
+                boolean isExistingId = false;
+                for (RecentlyEntity recentlyEntity : recentlyEntityList) {
+                    if (recentlyEntity.getProductEntity().getId() == productId) {
+                        isExistingId = true;
+                        break;
+                    }
+                }
+                if (!isExistingId) {
+                    RecentlyEntity recentlyEntity = new RecentlyEntity();
+                    recentlyEntity.setProductEntity(product);
+                    recentlyEntity.setUserEntity(user);
+                    recentlyReponsitory.save(recentlyEntity);
+                }
+            }
+            else {
+                recentlyEntityList = new ArrayList<>();
+                RecentlyEntity recentlyEntity = new RecentlyEntity();
+                recentlyEntity.setProductEntity(product);
+                recentlyEntity.setUserEntity(user);
+                recentlyReponsitory.save(recentlyEntity);
+            }
+        }
+
         return "product-detail";
     }
 }

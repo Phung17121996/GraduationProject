@@ -34,6 +34,8 @@ public class UserController {
     StateRepository stateRepository;
     @Autowired
     ProductQuantityRepository productQuantityRepository;
+    @Autowired
+    RecentlyReponsitory recentlyReponsitory;
 
     @RequestMapping(value="userInfo")
     public String userPage(Model model,
@@ -149,6 +151,14 @@ public class UserController {
         List<FavouriteEntity> favouriteList = favouriteRepository.getFavouriteListByUserId(userId);
         model.addAttribute("favouriteList",favouriteList);
         return"favourite";
+    }
+
+    @RequestMapping(value = "recentlyList")
+    public String recentlyList(Model model,
+                               @RequestParam(name = "userId") int userId) {
+        List<RecentlyEntity> recentlyEntityList = recentlyReponsitory.getRecentlyListByUserId(userId);
+        model.addAttribute("recentlyList", recentlyEntityList);
+        return "recently";
     }
 
     @RequestMapping(value="logOut")

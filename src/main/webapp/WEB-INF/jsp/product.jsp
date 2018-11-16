@@ -487,14 +487,14 @@
 
     // Ajax favourite
     function favourite (productId) {
-            $.ajax({
-                type: "POST",
-                url: "favourite?productId=" + productId,
-                timeout: 100000,
-                success: function (data) {
-                }
-            });
-        };
+       	$.ajax({
+       	    type: "POST",
+       	    url: "favourite?productId=" + productId,
+       	    timeout: 100000,
+       	    success: function (data) {
+       	    }
+       	});
+	};
 
     var filterBar = document.getElementById('filter-bar');
 
