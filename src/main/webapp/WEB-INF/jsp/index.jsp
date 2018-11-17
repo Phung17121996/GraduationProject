@@ -76,9 +76,7 @@
 												   name="password" placeholder="Password" id="password" required>
 										</div>
 										<div >
-											<label style="margin-left: 1em;color: #003eff">
-												<a href="/reset_password">Forgot Your Password??</a>
-											</label>
+											<a href="https://www.facebook.com/dialog/oauth?client_id=705084929853943&redirect_uri=https://localhost:8081/login-facebook">Login Facebook</a>
 										</div>
 										<div class="form-group">
 											<button type="submit" class="btn btn-success btn-block">Sign in
@@ -109,10 +107,6 @@
 
 						<li>
 							<a href="product?categoryId=5">Shop</a>
-						</li>
-
-						<li>
-							<a href="about">About</a>
 						</li>
 
 						<li>
@@ -622,12 +616,6 @@
 			</h4>
 
 			<ul>
-				<li class="p-b-9">
-					<a href="about" class="s-text7">
-						About Us
-					</a>
-				</li>
-
 				<li class="p-b-9">
 					<a href="contact" class="s-text7">
 						Contact Us

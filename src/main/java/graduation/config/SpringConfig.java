@@ -24,7 +24,7 @@ public class SpringConfig {
     DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/do_an"); //spring-jpa-1: database name
+        dataSource.setUrl("jdbc:mysql://localhost:3306/do_an?useUnicode=yes&characterEncoding=UTF-8"); //spring-jpa-1: database name
         dataSource.setUsername("root");
         dataSource.setPassword("17121996");
         return  dataSource;

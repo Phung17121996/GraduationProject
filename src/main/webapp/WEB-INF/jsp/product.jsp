@@ -110,10 +110,6 @@
 						</li>
 
 						<li>
-							<a href="about">About</a>
-						</li>
-
-						<li>
 							<a href="contact">Contact</a>
 						</li>
 					</ul>
@@ -430,12 +426,6 @@
 			</h4>
 
 			<ul>
-				<li class="p-b-9">
-					<a href="about" class="s-text7">
-						About Us
-					</a>
-				</li>
-
 				<li class="p-b-9">
 					<a href="contact" class="s-text7">
 						Contact Us

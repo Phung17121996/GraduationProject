@@ -111,10 +111,6 @@
 						</li>
 
 						<li>
-							<a href="about">About</a>
-						</li>
-
-						<li>
 							<a href="contact">Contact</a>
 						</li>
 					</ul>
@@ -237,8 +233,8 @@
 				</p>
 
 				<div class="flex-m p-t-30">
-					<a href="https://www.facebook.com/tribute.to.chester" class="fs-18 color1 p-r-20 fa fa-facebook"></a>
-					<a href="https://www.instagram.com/matxe__/" class="fs-18 color1 p-r-20 fa fa-instagram"></a>
+					<a href="" class="fs-18 color1 p-r-20 fa fa-facebook"></a>
+					<a href="" class="fs-18 color1 p-r-20 fa fa-instagram"></a>
 					<a href="#" class="fs-18 color1 p-r-20 fa fa-pinterest-p"></a>
 					<a href="#" class="fs-18 color1 p-r-20 fa fa-snapchat-ghost"></a>
 					<a href="#" class="fs-18 color1 p-r-20 fa fa-youtube-play"></a>
@@ -284,12 +280,6 @@
 			</h4>
 
 			<ul>
-				<li class="p-b-9">
-					<a href="about" class="s-text7">
-						About Us
-					</a>
-				</li>
-
 				<li class="p-b-9">
 					<a href="contact" class="s-text7">
 						Contact Us
