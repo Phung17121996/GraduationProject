@@ -182,7 +182,7 @@
     <div class="row">
         <br>
         <h1 style="color: #0c5460;margin-left: 12em"><strong>My Orders</strong></h1><br>
-        <h4 style="margin-left: 14em">Any question don't hesitate to <a href="contact" style="font-size: 20px;"><strong>reach out</strong></a> or call us at (+86) 96 716 0352  </h4><br>
+        <h4 style="margin-left: 14em">Any question don't hesitate to <a href="contact" style="font-size: 20px;"><strong>reach out</strong></a> or call us at (+84) 38 245 1973  </h4><br>
     </div>
     <table class="display" id="dataTable">
         <thead>
@@ -282,7 +282,7 @@
 
             <div>
                 <p class="s-text7 w-size27">
-                    Any questions? Let us know in store at 49 Dinh Cong Trang, Thuan Phuoc Zone or call us on (+86) 96 716 0352
+                    Any questions? Let us know in store at 54 Nguyen Luong Bang, Da Nang or call us on (+84) 38 245 1973
                 </p>
 
                 <div class="flex-m p-t-30">

@@ -214,7 +214,7 @@
 
             <div>
                 <p class="s-text7 w-size27">
-                    Any questions? Let us know in store at 49 Dinh Cong Trang, Thuan Phuoc Zone or call us on (+86) 96 716 0352
+                    Any questions? Let us know in store at 54 Nguyen Luong Bang, Da Nang or call us on (+84) 38 245 1973
                 </p>
 
                 <div class="flex-m p-t-30">

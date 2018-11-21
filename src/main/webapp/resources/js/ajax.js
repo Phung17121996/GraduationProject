@@ -18,7 +18,7 @@ function userLogin() {
             else if (data == 2) {
                 alert("Your password is incorrect.Try again!")
             }
-            else if (data == 4) {
+            else if (data == 3) {
                 alert("Your account is disabled by admin! Please contact to admin for question!")
             }
             else {
@@ -27,16 +27,6 @@ function userLogin() {
         }
     });
 
-    // function display(data) {
-    //     var newData= data.split('||');
-    //     if(newData[0] !== 'admin'){
-    //         $('.topbar-child2').replaceWith(data);
-    //     }
-    //     else {
-    //         window.location.replace(newData[0]);
-    //         $('.topbar-child2').replaceWith(newData[1]);
-    //     }
-    // }
     function  display(data) {
         $('.topbar-child2').replaceWith(data);
     }
