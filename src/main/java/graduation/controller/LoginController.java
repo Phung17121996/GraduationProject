@@ -1,17 +1,10 @@
 package graduation.controller;
-
-import com.restfb.types.User;
 import graduation.LoginConst;
 import graduation.entity.UserEntity;
 import graduation.helper.Pbkdf2Encryptor;
 import graduation.repository.RoleRepository;
 import graduation.repository.UserRepository;
-import graduation.social.RestFB;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Controller
 public class LoginController {
@@ -29,8 +21,6 @@ public class LoginController {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    private RestFB restFB;
 
     @RequestMapping(value = "login",method = RequestMethod.POST)
     @ResponseBody
@@ -182,23 +172,5 @@ public class LoginController {
             }
         }
         else return String.valueOf(LoginConst.USER_NULL);
-    }
-
-    @RequestMapping("/login-facebook")
-    public String loginFacebook(HttpServletRequest request) {
-        String code = request.getParameter("code");
-        String accessToken = "";
-        try {
-            accessToken = restFB.getToken(code);
-        } catch (IOException e) {
-            return "login?facebook=error";
-        }
-        User user = restFB.getUserInfo(accessToken);
-        UserDetails userDetail = restFB.buildUser(user);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
-                userDetail.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "redirect:/index";
     }
 }
