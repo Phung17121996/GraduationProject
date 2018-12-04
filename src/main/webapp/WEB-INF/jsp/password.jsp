@@ -204,8 +204,6 @@
                                 <lable><strong>Email: </strong><span style="color: red;">*</span></lable>
                                 <input type="email" name="email" class="form-control" value="${user.email}" readonly/>
                             </div>
-                                <lable><strong>Current Password: </strong><span style="color: red;">*</span></lable>
-                                <input type="password" name="currentPassword" class="form-control" minlength="8" maxlength="25" required="required"/>
                             <div class="form-group">
                                 <lable><strong>New Password: </strong><span style="color: red;">*</span></lable>
                                  <input type="password" name="newPassword" class="form-control" minlength="8" maxlength="25" required="required" />
@@ -213,10 +211,6 @@
                             <div class="form-group">
                                 <lable><strong>Confirm Password: </strong><span style="color: red;">*</span></lable>
                                 <input type="password" name="confirmPassword" class="form-control" minlength="8" maxlength="25" required="required" />
-                            </div>
-                            <div class="form-group" oncopy="return false" oncut="return false" onpaste="return false">
-                                <lable><strong>Please Input <span style="color: red;">*</span>${captcha}</strong><span style="color: red;">*</span></lable>
-                                <input type="text" name="captcha" class="form-control" required="required" />
                             </div>
                             <div class="form-group">
                                 <div class="row">

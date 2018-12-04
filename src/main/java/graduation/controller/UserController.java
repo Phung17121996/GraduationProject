@@ -79,66 +79,27 @@ public class UserController {
     @RequestMapping(value="password", method = RequestMethod.POST)
     public String doPassword(Model model,
                              HttpServletRequest request,
-                             @RequestParam(name="email") String email,
-                             @RequestParam(name="currentPassword") String currentPassword,
                              @RequestParam(name="newPassword") String newPassword,
-                             @RequestParam(name="confirmPassword") String confirmPassword,
-                             @RequestParam(name = "captcha") String captcha){
-
-        UserEntity user = userRepository.findByEmail(email);
-        String keyhash = user.getKeyHash();
-        String hashedPassword = Pbkdf2Encryptor.createHash(currentPassword,keyhash,1000);
+                             @RequestParam(name="confirmPassword") String confirmPassword){
         HttpSession session = request.getSession();
-        String keyCapt = (String) session.getAttribute("captcha");
-        if (!confirmPassword.equals(newPassword)) {
-            String errorMessage = "Your confirm password is incorrect";
-            model.addAttribute("errorMessage",errorMessage);
-            model.addAttribute("email",email);
-            String capt =  GenCaptchaUtil.getCaptcha();
-            model.addAttribute("captcha", capt);
-            request.getSession().setAttribute("captcha", capt);
-            return"password";
-        }
-        if (newPassword.equals(currentPassword)) {
-            String errorMessage = "Your password already exist";
-            model.addAttribute("errorMessage",errorMessage);
-            model.addAttribute("email",email);
-            String capt =  GenCaptchaUtil.getCaptcha();
-            model.addAttribute("captcha", capt);
-            request.getSession().setAttribute("captcha", capt);
-            return"password";
-        }
-        if (!captcha.equals(keyCapt)) {
-            String errorMessage = "Your Input Captcha is incorrect";
-            model.addAttribute("errorMessage",errorMessage);
-            model.addAttribute("email",email);
-            String capt =  GenCaptchaUtil.getCaptcha();
-            model.addAttribute("captcha", capt);
-            request.getSession().setAttribute("captcha", capt);
-            return"password";
-        }
-        if( user.getHashedPass().equals(hashedPassword) ){
-            String newHashedPassword = Pbkdf2Encryptor.createHash(newPassword,keyhash,1000);
-            user.setHashedPass(newHashedPassword);
-            user.setKeyHash(keyhash);
-            user.setId(user.getId());
-            String message = "Your password has been changed successfully";
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        String keyhash = user.getKeyHash();
+        String newHashedPassword = Pbkdf2Encryptor.createHash(newPassword,keyhash,1000);
+        if (!newPassword.equals(confirmPassword)) {
+            String errorMessage = "Your confirm password incorrect";
             model.addAttribute("email",user.getEmail());
-            model.addAttribute("message",message);
-            String capt =  GenCaptchaUtil.getCaptcha();
-            model.addAttribute("captcha", capt);
-            request.getSession().setAttribute("captcha", capt);
+            model.addAttribute("message",errorMessage);
             return "password";
         }
-        else{
-            String errorMessage = "Your current password is incorrect";
-            model.addAttribute("errorMessage",errorMessage);
-            model.addAttribute("email",email);
-            String capt =  GenCaptchaUtil.getCaptcha();
-            model.addAttribute("captcha", capt);
-            request.getSession().setAttribute("captcha", capt);
-            return"password";
-        }
+
+        user.setHashedPass(newHashedPassword);
+        user.setKeyHash(keyhash);
+        user.setId(user.getId());
+        userRepository.save(user);
+        String message = "Your password has been changed successfully";
+        model.addAttribute("email",user.getEmail());
+        model.addAttribute("message",message);
+        return "password";
     }
 
     @RequestMapping(value="orderHistory")
