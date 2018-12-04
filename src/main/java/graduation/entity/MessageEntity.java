@@ -1,6 +1,8 @@
 package graduation.entity;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by PhunHV on 08/11/2018.
@@ -17,6 +19,9 @@ public class MessageEntity {
 
     @Column(name="email")
     private String email;
+
+    @Column(name="time")
+    private Timestamp timestamp;
 
     private String isRep;
 
@@ -65,5 +70,13 @@ public class MessageEntity {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 }

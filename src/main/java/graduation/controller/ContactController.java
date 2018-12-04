@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 
 @Controller
 public class ContactController {
@@ -44,10 +45,12 @@ public class ContactController {
             message.setUserEntity(user);
             message.setEmail(user.getEmail());
             message.setIsRep("true");
+            message.setTimestamp(new Timestamp(System.currentTimeMillis()));
             messageRepository.save(message);
         }else{
             message.setEmail(email);
             message.setIsRep("true");
+            message.setTimestamp(new Timestamp(System.currentTimeMillis()));
             messageRepository.save(message);
         }
         String notify = "Your message has been sent successfully";
