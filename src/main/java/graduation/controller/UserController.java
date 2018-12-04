@@ -1,6 +1,7 @@
 package graduation.controller;
 
 import graduation.entity.*;
+import graduation.helper.GenCaptchaUtil;
 import graduation.helper.GmailSender;
 import graduation.helper.Pbkdf2Encryptor;
 import graduation.repository.*;
@@ -65,22 +66,57 @@ public class UserController {
 
     @RequestMapping(value="password")
     public String passwordPage(Model model,
+                               HttpServletRequest request,
                                @RequestParam(name="userId") int userId){
         UserEntity user = userRepository.findOne(userId);
         model.addAttribute("email",user.getEmail());
+        String capt =  GenCaptchaUtil.getCaptcha();
+        model.addAttribute("captcha", capt);
+        request.getSession().setAttribute("captcha", capt);
         return "password";
     }
 
     @RequestMapping(value="password", method = RequestMethod.POST)
     public String doPassword(Model model,
+                             HttpServletRequest request,
                              @RequestParam(name="email") String email,
                              @RequestParam(name="currentPassword") String currentPassword,
-                             @RequestParam(name="newPassword") String newPassword){
+                             @RequestParam(name="newPassword") String newPassword,
+                             @RequestParam(name="confirmPassword") String confirmPassword,
+                             @RequestParam(name = "captcha") String captcha){
 
         UserEntity user = userRepository.findByEmail(email);
         String keyhash = user.getKeyHash();
         String hashedPassword = Pbkdf2Encryptor.createHash(currentPassword,keyhash,1000);
-
+        HttpSession session = request.getSession();
+        String keyCapt = (String) session.getAttribute("captcha");
+        if (!confirmPassword.equals(newPassword)) {
+            String errorMessage = "Your confirm password is incorrect";
+            model.addAttribute("errorMessage",errorMessage);
+            model.addAttribute("email",email);
+            String capt =  GenCaptchaUtil.getCaptcha();
+            model.addAttribute("captcha", capt);
+            request.getSession().setAttribute("captcha", capt);
+            return"password";
+        }
+        if (newPassword.equals(currentPassword)) {
+            String errorMessage = "Your password already exist";
+            model.addAttribute("errorMessage",errorMessage);
+            model.addAttribute("email",email);
+            String capt =  GenCaptchaUtil.getCaptcha();
+            model.addAttribute("captcha", capt);
+            request.getSession().setAttribute("captcha", capt);
+            return"password";
+        }
+        if (!captcha.equals(keyCapt)) {
+            String errorMessage = "Your Input Captcha is incorrect";
+            model.addAttribute("errorMessage",errorMessage);
+            model.addAttribute("email",email);
+            String capt =  GenCaptchaUtil.getCaptcha();
+            model.addAttribute("captcha", capt);
+            request.getSession().setAttribute("captcha", capt);
+            return"password";
+        }
         if( user.getHashedPass().equals(hashedPassword) ){
             String newHashedPassword = Pbkdf2Encryptor.createHash(newPassword,keyhash,1000);
             user.setHashedPass(newHashedPassword);
@@ -89,12 +125,18 @@ public class UserController {
             String message = "Your password has been changed successfully";
             model.addAttribute("email",user.getEmail());
             model.addAttribute("message",message);
+            String capt =  GenCaptchaUtil.getCaptcha();
+            model.addAttribute("captcha", capt);
+            request.getSession().setAttribute("captcha", capt);
             return "password";
         }
         else{
             String errorMessage = "Your current password is incorrect";
             model.addAttribute("errorMessage",errorMessage);
             model.addAttribute("email",email);
+            String capt =  GenCaptchaUtil.getCaptcha();
+            model.addAttribute("captcha", capt);
+            request.getSession().setAttribute("captcha", capt);
             return"password";
         }
     }
