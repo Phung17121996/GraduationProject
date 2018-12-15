@@ -29,20 +29,20 @@ public class LoginController {
                           @RequestParam(value = "password") String password,
                           HttpServletRequest request){
         HttpSession session = request.getSession();
-        UserEntity user = userRepository.findByEmail(email);
+        UserEntity user = userRepository.getUserByEmail(email, password);
         if (user == null) {
             return String.valueOf(LoginConst.EMAIL_ERROR);
         }
 
-        String keyHash = user.getKeyHash();
-        String hashedPass = Pbkdf2Encryptor.createHash(password, keyHash, 1000);
-        if (!user.getHashedPass().equals(hashedPass)) {
-            return String.valueOf(LoginConst.PASSWORD_ERROR);
-        }
-        else if(user.getIsDel().equalsIgnoreCase("false")){
-            return String.valueOf(LoginConst.BANNED_USER);
-        }
-        else {
+//        String keyHash = user.getKeyHash();
+//        String hashedPass = Pbkdf2Encryptor.createHash(password, keyHash, 1000);
+//        if (!user.getHashedPass().equals(hashedPass)) {
+//            return String.valueOf(LoginConst.PASSWORD_ERROR);
+//        }
+//        else if(user.getIsDel().equalsIgnoreCase("false")){
+//            return String.valueOf(LoginConst.BANNED_USER);
+//        }
+//        else {
             if(user.getRoleEntity().getId() == roleRepository.findOne(2).getId()){
                 session.setAttribute("user", user);
                 String data= "<div class=\"topbar-child2\">\n" +
@@ -100,7 +100,7 @@ public class LoginController {
                         "\t</div>\n" +
                         "</div>";
                 return data;
-            }
+//            }
 
         }
 

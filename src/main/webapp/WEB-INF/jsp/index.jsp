@@ -647,7 +647,7 @@
 <!--===============================================================================================-->
 <script type="text/javascript" src="/resources/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-<script type="text/javascript" src="/resources/vendor/bootstrap/js/popper.js"></script>
+<%--<script type="text/javascript" src="/resources/vendor/bootstrap/js/popper.js"></script>--%>
 <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="/resources/vendor/select2/select2.min.js"></script>

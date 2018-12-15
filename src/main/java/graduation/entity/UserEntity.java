@@ -41,6 +41,9 @@ public class UserEntity {
     @Column(name="keyHash")
     private  String keyHash;
 
+    @Column(name = "password")
+    private String password;
+
     @ManyToOne
     @JoinColumn(name="roleId")
     private RoleEntity roleEntity;
@@ -111,6 +114,14 @@ public class UserEntity {
 
     public void setKeyHash(String keyHash) {
         this.keyHash = keyHash;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public RoleEntity getRoleEntity() {
