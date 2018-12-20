@@ -5,6 +5,8 @@ import graduation.helper.GenCaptchaUtil;
 import graduation.helper.GmailSender;
 import graduation.helper.Pbkdf2Encryptor;
 import graduation.repository.*;
+import graduation.util.MailUtil;
+import graduation.util.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -85,11 +87,23 @@ public class UserController {
                              @RequestParam(name="confirmPassword") String confirmPassword,
                              @RequestParam(name = "captcha") String captcha){
 
+        //check format pass
+//        if (!RegexUtil.validatePassword(newPassword)) {
+//            String errorMessage = "Your format password is incorrect";
+//            model.addAttribute("errorMessage",errorMessage);
+//            model.addAttribute("email",email);
+//            String capt =  GenCaptchaUtil.getCaptcha();
+//            model.addAttribute("captcha", capt);
+//            request.getSession().setAttribute("captcha", capt);
+//            return"password";
+//        }
+
         UserEntity user = userRepository.findByEmail(email);
         String keyhash = user.getKeyHash();
         String hashedPassword = Pbkdf2Encryptor.createHash(currentPassword,keyhash,1000);
         HttpSession session = request.getSession();
         String keyCapt = (String) session.getAttribute("captcha");
+
         if (!confirmPassword.equals(newPassword)) {
             String errorMessage = "Your confirm password is incorrect";
             model.addAttribute("errorMessage",errorMessage);
@@ -154,6 +168,9 @@ public class UserController {
                               @RequestParam("orderId") int orderId){
         HttpSession session = request.getSession();
         UserEntity user = (UserEntity)session.getAttribute("user");
+        if (user == null) {
+            return "404";
+        }
 
         OrdersEntity ordersEntity = ordersRepository.findOne(orderId);
         StateEntity stateEntity = stateRepository.findOne(4);
@@ -234,7 +251,7 @@ public class UserController {
             user.setHashedPass(hashedPass);
             user.setId(user.getId());
 
-            sendMail(user,password);
+            MailUtil.sendMailResetPassword(user,password);
             String message ="Please check your mail and follow our instruction.";
             model.addAttribute("message",message);
             return "reset_password";
@@ -242,19 +259,6 @@ public class UserController {
             String errorMessage ="There is no result matches your email. Please try again.";
             model.addAttribute("errorMessage",errorMessage);
             return "reset_password";
-        }
-    }
-
-    public void sendMail(UserEntity userEntity,String password){
-        String subject = "Recover Your Password";
-        String body = "<h1> Dear " + userEntity.getFullName() + ",<h1>"
-                +"<h2>We recently have received your request</h2>"
-                + "<h2>You can use this code to login your account: " + password +"</h2>";
-
-        try {
-            GmailSender.send(userEntity.getEmail(), subject, body, true);
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 }

@@ -5,6 +5,7 @@ import graduation.entity.ProductEntity;
 import graduation.entity.ProductQuantityEntity;
 import graduation.entity.UserEntity;
 import graduation.repository.*;
+import graduation.util.AdminUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +68,9 @@ public class AdminProductController {
     @ResponseBody
     public String deleteProduct(@RequestParam(name = "productId") int productId,
                                 HttpServletRequest request) {
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         ProductEntity productEntity = productRepository.findOne(productId);
         productEntity.setIsDel("false");
         productRepository.save(productEntity);
@@ -112,6 +116,9 @@ public class AdminProductController {
     @ResponseBody
     public String enableProduct(@RequestParam(name = "productId") int productId,
                                 HttpServletRequest request) {
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         ProductEntity productEntity = productRepository.findOne(productId);
         productEntity.setIsDel("true");
         productRepository.save(productEntity);
@@ -159,7 +166,11 @@ public class AdminProductController {
     public String addProduct(ProductEntity productEntity,
                              @RequestParam(name = "categoryName") String category,
                              @RequestParam(name = "quantity") String quantity,
-                             @RequestParam("file") MultipartFile[] file){
+                             @RequestParam("file") MultipartFile[] file,
+                             HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         try {
             for(int i=0; i<file.length; i++){
                 byte[] bytes = file[i].getBytes();
@@ -218,7 +229,10 @@ public class AdminProductController {
 
     @RequestMapping("editProduct")
     public String editProduct(@RequestParam(name = "id") int id,
-                              Model model){
+                              Model model, HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         ProductEntity product= productRepository.findOne(id);
         model.addAttribute("product", product);
         return "admin_editproduct";
@@ -229,7 +243,11 @@ public class AdminProductController {
                          @RequestParam(name = "productName") String name,
                          @RequestParam(name = "description") String description,
                          @RequestParam(name = "price") double price,
-                         @RequestParam(name = "quantity") int quantity){
+                         @RequestParam(name = "quantity") int quantity,
+                         HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         ProductEntity productEntity= productRepository.findOne(id);
         productEntity.setProductName(name);
         productEntity.setDescription(description);

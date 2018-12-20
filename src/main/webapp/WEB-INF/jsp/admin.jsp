@@ -256,7 +256,6 @@
     }
 </script>
 <script src="/resources/js/jquery.twbsPagination.min.js"/>
-
 <!--===============================================================================================-->
 <script src="/resources/js/main.js"></script>
 <script src="/resources/js/ajaxSession.js"></script>

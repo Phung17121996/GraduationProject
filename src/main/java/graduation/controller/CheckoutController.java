@@ -3,6 +3,7 @@ package graduation.controller;
 import graduation.entity.*;
 import graduation.helper.GmailSender;
 import graduation.repository.*;
+import graduation.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -152,7 +153,7 @@ public class CheckoutController {
             discountCodeEntity.setCode(discountCodde);
             discountCodeEntity.setIsUsed("False");
             discountCodeRepository.save(discountCodeEntity);
-            sendMail(userEntity, discountCodde);
+            MailUtil.sendMailCheckout(userEntity, discountCodde);
         }
         session.removeAttribute("carts");
         session.removeAttribute("orderSubtotal");
@@ -160,20 +161,5 @@ public class CheckoutController {
         model.addAttribute("carts", carts);
         model.addAttribute("order", order);
         return "thank_you";
-    }
-
-    public void sendMail(UserEntity userEntity, String discountCode) {
-        String subject = "Thank you for your support";
-        String body = "<h1> Dear " + userEntity.getFullName() + ",<h1>"
-                + "<h4>I want you to know how much we enjoy serving your clothing needs and consider you a special customer. " +
-                "Of course we appreciate your orders, but we also appreciate the positive lift we get from your visits. " +
-                "As a token of our appreciation, I am enclosing a discount code worth 20% off your next purchase. Here is your discount code: " +
-                " <h3>" + discountCode + ". <h3>" +
-                "Come visit us soon. </h4>";
-        try {
-            GmailSender.send(userEntity.getEmail(), subject, body, true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

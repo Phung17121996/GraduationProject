@@ -4,6 +4,7 @@ import graduation.entity.FavouriteEntity;
 import graduation.entity.OrdersEntity;
 import graduation.entity.UserEntity;
 import graduation.repository.*;
+import graduation.util.AdminUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +45,10 @@ public class AdminUserController {
     @ResponseBody
     public String deleteUser(@RequestParam(name = "id") int id,
                               HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
+
         UserEntity userEntity= userRepository.findOne(id);
         userEntity.setIsDel("false");
         userRepository.save(userEntity);
@@ -90,6 +95,9 @@ public class AdminUserController {
     @ResponseBody
     public String enableUser(@RequestParam(name = "id") int id,
                              HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         UserEntity userEntity= userRepository.findOne(id);
         userEntity.setIsDel("true");
         userRepository.save(userEntity);
@@ -136,7 +144,9 @@ public class AdminUserController {
     public String showDetailUser(@RequestParam(name = "userId") int id,
                                  Model model,
                                  HttpServletRequest request){
-        HttpSession session= request.getSession();
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         UserEntity user= userRepository.findOne(id);
 
         List<OrdersEntity> orders= ordersRepository.getOrderByUserId(id);

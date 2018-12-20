@@ -6,6 +6,8 @@ import graduation.entity.UserEntity;
 import graduation.helper.GmailSender;
 import graduation.repository.MessageRepository;
 import graduation.repository.OrdersRepository;
+import graduation.util.AdminUtil;
+import graduation.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +34,7 @@ public class AdminController {
 
     @RequestMapping("admin")
     public String showAdmin(Model model, HttpServletRequest request){
-        HttpSession session= request.getSession();
-        UserEntity admin= (UserEntity) session.getAttribute("user");
-        if(admin == null || admin.getRoleEntity().getId()!=2){
+        if (!AdminUtil.checkRoleAdmin(request)) {
             return "404";
         }
         //Chart
@@ -78,8 +78,12 @@ public class AdminController {
     @RequestMapping(value = "sendMessage", method = POST)
     public String sendMessage(@RequestParam(name = "mess") String message,
                               @RequestParam(name = "email") String email,
-                              @RequestParam(name = "content") String content){
-        sendMail(email,message);
+                              @RequestParam(name = "content") String content,
+                              HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
+        MailUtil.sendMailReFeedback(email, message);
         List<MessageEntity> messageEntities= (List<MessageEntity>) messageRepository.getMessageDESC();
         for(MessageEntity mess: messageEntities){
             if(mess.getEmail().equalsIgnoreCase(email) && mess.getContent().equalsIgnoreCase(content)){
@@ -89,16 +93,5 @@ public class AdminController {
             }
         }
         return "redirect:admin";
-    }
-
-    public void sendMail(String email, String message){
-        String subject = "Reply from Fashe to your message";
-        String body = "<h1> Dear " +email + ",<h1>"
-                + "<h2>"+ message+"</h2>";
-        try {
-            GmailSender.send(email, subject, body, true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

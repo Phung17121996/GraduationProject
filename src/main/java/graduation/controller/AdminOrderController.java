@@ -6,12 +6,14 @@ import graduation.entity.StateEntity;
 import graduation.repository.OrderDetailRepository;
 import graduation.repository.OrdersRepository;
 import graduation.repository.StateRepository;
+import graduation.util.AdminUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -24,7 +26,10 @@ public class AdminOrderController {
     OrderDetailRepository orderDetailRepository;
 
     @RequestMapping("admin_order")
-    public String showOrders(Model model){
+    public String showOrders(Model model, HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         List<OrdersEntity> orders= (List<OrdersEntity>) ordersRepository.getOrdersDESC();
         model.addAttribute("orders", orders);
         return "admin_order";
@@ -32,7 +37,10 @@ public class AdminOrderController {
 
     @RequestMapping("detailOrder")
     public String viewOrder(@RequestParam(name = "id") int id,
-                            Model model){
+                            Model model, HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         OrdersEntity order= (OrdersEntity) ordersRepository.findOne(id);
         List<OrderDetailEntity> orderDetailList= orderDetailRepository.getOrderDetailByOrdersId(id);
 
@@ -47,7 +55,11 @@ public class AdminOrderController {
 
     @RequestMapping("updateOrder")
     public String updateOrder(@RequestParam(name = "id") int id,
-                              @RequestParam(name = "state") int stateId){
+                              @RequestParam(name = "state") int stateId,
+                              HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         OrdersEntity order= (OrdersEntity) ordersRepository.findOne(id);
         StateEntity stateEntity= stateRepository.findOne(stateId);
         order.setStateEntity(stateEntity);

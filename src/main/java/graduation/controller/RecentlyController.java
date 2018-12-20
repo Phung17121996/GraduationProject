@@ -28,7 +28,13 @@ public class RecentlyController {
     @RequestMapping(value = "deleteRecently")
     public String deleteRecently(Model model,
                                   @RequestParam(name="recentlyId") int recentlyId,
-                                  @RequestParam(name="userId") int userId){
+                                  @RequestParam(name="userId") int userId,
+                                 HttpServletRequest request){
+        HttpSession session = request.getSession();
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        if(user == null) {
+            return "404";
+        }
         RecentlyEntity recentlyEntity = recentlyReponsitory.findOne(recentlyId);
         recentlyReponsitory.delete(recentlyEntity);
         // load again

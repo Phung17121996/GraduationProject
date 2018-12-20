@@ -4,6 +4,7 @@ import graduation.entity.MessageEntity;
 import graduation.entity.UserEntity;
 import graduation.repository.MessageRepository;
 import graduation.repository.UserRepository;
+import graduation.util.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +39,12 @@ public class ContactController {
     public String doContact(Model model,
                             @RequestParam(name="email") String email,
                             @RequestParam(name="content") String content){
+        if (!RegexUtil.validateEmail(email) || !RegexUtil.validateString(content)) {
+            String notify = "Your message has format incorrect";
+            model.addAttribute("notify",notify);
+            return"contact";
+        }
+
         UserEntity user = userRepository.findByEmail(email);
         MessageEntity message = new MessageEntity();
         message.setContent(content);

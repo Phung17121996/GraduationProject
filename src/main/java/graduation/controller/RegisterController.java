@@ -10,6 +10,8 @@ import graduation.repository.DiscountCodeRepository;
 import graduation.repository.ProductRepository;
 import graduation.repository.RoleRepository;
 import graduation.repository.UserRepository;
+import graduation.util.MailUtil;
+import graduation.util.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,7 +73,7 @@ public class RegisterController {
 
 
             session.setAttribute("user", userEntity);
-            sendMail(userEntity,discountCode);
+            MailUtil.sendMailRegister(userEntity,discountCode);
             List<ProductEntity> products = (List<ProductEntity>)productRepository.getHotProduct();
             model.addAttribute("products",products);
         }else{
@@ -80,19 +82,5 @@ public class RegisterController {
             return "register";
         }
         return "redirect:index";
-    }
-
-    public void sendMail(UserEntity userEntity, String discountCode){
-        String subject = "Registration successfully";
-        String body = "<h1> Dear " + userEntity.getFullName() + ",<h1>"
-                + "<h2>You've registered successfully to our website. </h2>"
-                + "<h2>And to wellcome you to our system, here is a small gift for our new customer. " +
-                "Use this code to get 20% discount on your fisrt order. Your code: </h2>" +discountCode
-                + "<h2>Enjoy your time with us</h2>";
-        try {
-            GmailSender.send(userEntity.getEmail(), subject, body, true);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

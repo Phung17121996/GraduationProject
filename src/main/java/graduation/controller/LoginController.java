@@ -4,6 +4,7 @@ import graduation.entity.UserEntity;
 import graduation.helper.Pbkdf2Encryptor;
 import graduation.repository.RoleRepository;
 import graduation.repository.UserRepository;
+import graduation.util.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,10 @@ public class LoginController {
                           @RequestParam(value = "email") String email,
                           @RequestParam(value = "password") String password,
                           HttpServletRequest request){
+        //check format email
+        if (!RegexUtil.validateEmail(email)) {
+            return String.valueOf(LoginConst.EMAIL_ERROR);
+        }
         HttpSession session = request.getSession();
         UserEntity user = userRepository.findByEmail(email);
         if (user == null) {

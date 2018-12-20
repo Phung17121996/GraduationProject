@@ -5,6 +5,7 @@ import graduation.entity.UserEntity;
 import graduation.repository.BannerRepository;
 import graduation.repository.ImageRepository;
 import graduation.repository.RoleRepository;
+import graduation.util.AdminUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,6 +57,10 @@ public class AdminBannerController {
     @ResponseBody
     public String disableBanner(@RequestParam(name = "bannerId") int bannerId,
                                 HttpServletRequest request) {
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
+
         BannerEntity bannerEntity= bannerRepository.findOne(bannerId);
         bannerEntity.setEnable("false");
         bannerRepository.save(bannerEntity);
@@ -94,6 +99,9 @@ public class AdminBannerController {
     @ResponseBody
     public String enableBanner(@RequestParam(name = "bannerId") int bannerId,
                                HttpServletRequest request) {
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         BannerEntity bannerEntity= bannerRepository.findOne(bannerId);
         bannerEntity.setEnable("true");
         bannerRepository.save(bannerEntity);
@@ -131,7 +139,11 @@ public class AdminBannerController {
 
 
     @RequestMapping(value = "addBanner",headers = "content-type=multipart/*", method = POST)
-    public String addProduct(@RequestParam("file") MultipartFile[] file){
+    public String addProduct(@RequestParam("file") MultipartFile[] file,
+                             HttpServletRequest request){
+        if (!AdminUtil.checkRoleAdmin(request)) {
+            return "404";
+        }
         try {
             for(int i=0; i<file.length; i++){
                 byte[] bytes = file[i].getBytes();

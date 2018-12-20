@@ -199,7 +199,7 @@
 
 			<div class="col-md-6 p-b-30">
 				<form class="leave-comment"  action="message" method="post">
-					<h4 class="m-text26 p-b-36 p-t-15">
+					<h4 class="m-tetopbarxt26 p-b-36 p-t-15">
 						Send us your message
 					</h4>
 					<span style="color: #138496;font-size: medium">${notify}</span><br>
