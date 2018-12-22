@@ -34,6 +34,10 @@ public class ProductDetailController {
         HttpSession session = request.getSession();
         UserEntity user = (UserEntity)session.getAttribute("user");
         ViewEntity viewEntity = viewRepository.getViewByProductId(productId);
+        if (viewEntity == null) {
+            viewEntity = new ViewEntity();
+            viewEntity.setId(productId);
+        }
         viewEntity.setCount(viewEntity.getCount() + 1);
         viewRepository.save(viewEntity);
         //selected product

@@ -175,7 +175,7 @@ public class AdminProductController {
             for(int i=0; i<file.length; i++){
                 byte[] bytes = file[i].getBytes();
                 // Creating the directory to store file
-                String pathName = "C:\\Users\\PC\\Downloads\\Compressed\\ManShop\\src\\main\\webapp\\resources\\images\\product";
+                String pathName = "D:\\GraduationProject\\src\\main\\webapp\\resources\\images\\product";
                 File dir = new File(pathName);
                 if (!dir.exists()) {
                     dir.mkdirs();
@@ -193,16 +193,12 @@ public class AdminProductController {
 
             List<ImageEntity> imageEntities = new ArrayList<>();
 
-            ImageEntity image = new ImageEntity();
-            image.setImageName(file[0].getOriginalFilename());
-            image.setProductEntity(productEntity);
-            imageEntities.add(image);
-
-
-            ImageEntity image1 = new ImageEntity();
-            image1.setImageName(file[1].getOriginalFilename());
-            image1.setProductEntity(productEntity);
-            imageEntities.add(image1);
+            for (int i = 0; i < file.length; i++) {
+                ImageEntity image = new ImageEntity();
+                image.setImageName(file[i].getOriginalFilename());
+                image.setProductEntity(productEntity);
+                imageEntities.add(image);
+            }
 
             productEntity.setImageEntities(imageEntities);
 
@@ -215,15 +211,14 @@ public class AdminProductController {
 
             productQuantityRepository.save(productQuantity);
 
-            imageRepository.save(image);
-            imageRepository.save(image1);
+            imageRepository.save(imageEntities);
 
             productRepository.save(productEntity);
 
             return "redirect:admin_product";
         } catch (Exception e) {
             System.out.println(e);
-            return "Error when uploading file"+ e;
+            return "404";
         }
     }
 

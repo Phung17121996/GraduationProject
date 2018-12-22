@@ -51,11 +51,9 @@
     <div class="container-menu-header">
         <div class="topbar">
             <div class="topbar-social">
-                <a href="#" class="topbar-social-item fa fa-facebook"></a>
-                <a href="#" class="topbar-social-item fa fa-instagram"></a>
-                <a href="#" class="topbar-social-item fa fa-pinterest-p"></a>
-                <a href="#" class="topbar-social-item fa fa-snapchat-ghost"></a>
-                <a href="#" class="topbar-social-item fa fa-youtube-play"></a>
+                <a target="_blank" href="https://www.facebook.com/vanphung.it" class="topbar-social-item fa fa-facebook"></a>
+                <a target="_blank" href="https://www.instagram.com/" class="topbar-social-item fa fa-instagram"></a>
+                <a target="_blank" href="https://www.youtube.com/channel/UCH0aZyYuO_yWo_qc0DDormQ?view_as=subscriber" class="topbar-social-item fa fa-youtube-play"></a>
             </div>
 
             <span class="topbar-child1">
