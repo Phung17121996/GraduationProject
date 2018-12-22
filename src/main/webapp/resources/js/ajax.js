@@ -18,8 +18,11 @@ function userLogin() {
             else if (data == 2) {
                 alert("Your password is incorrect.Try again!")
             }
-            else if (data == 3) {
+            else if (data == 3 || data == 4) {
                 alert("Your account is disabled by admin! Please contact to admin for question!")
+            }
+            else if (data == 5) {
+                alert("Your account is locked in 1 day by system! Please contact to admin for question!")
             }
             else {
                 display(data);

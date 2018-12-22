@@ -1,15 +1,9 @@
 package graduation.controller;
 
-import graduation.entity.DiscountCodeEntity;
-import graduation.entity.ProductEntity;
-import graduation.entity.RoleEntity;
-import graduation.entity.UserEntity;
+import graduation.entity.*;
 import graduation.helper.GmailSender;
 import graduation.helper.Pbkdf2Encryptor;
-import graduation.repository.DiscountCodeRepository;
-import graduation.repository.ProductRepository;
-import graduation.repository.RoleRepository;
-import graduation.repository.UserRepository;
+import graduation.repository.*;
 import graduation.util.MailUtil;
 import graduation.util.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +30,8 @@ public class RegisterController {
     ProductRepository productRepository;
     @Autowired
     DiscountCodeRepository discountCodeRepository;
+    @Autowired
+    CheckLoginRepository checkLoginRepository;
 
     @RequestMapping(value = "register", method = GET)
     public String showSignUpPage(Model model) {
@@ -71,6 +67,15 @@ public class RegisterController {
             discountCodeEntity.setIsUsed("False");
             discountCodeRepository.save(discountCodeEntity);
 
+            //save check login
+            CheckLoginEntity checkLoginEntity = checkLoginRepository.findById(userEntity.getId());
+            if (checkLoginEntity == null) {
+                checkLoginEntity = new CheckLoginEntity();
+                checkLoginEntity.setId(userEntity.getId());
+                checkLoginEntity.setNumberLoginFail(0);
+                checkLoginEntity.setLastLogin((System.currentTimeMillis()));
+                checkLoginRepository.save(checkLoginEntity);
+            }
 
             session.setAttribute("user", userEntity);
             MailUtil.sendMailRegister(userEntity,discountCode);

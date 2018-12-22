@@ -1,7 +1,9 @@
 package graduation.controller;
 import graduation.LoginConst;
+import graduation.entity.CheckLoginEntity;
 import graduation.entity.UserEntity;
 import graduation.helper.Pbkdf2Encryptor;
+import graduation.repository.CheckLoginRepository;
 import graduation.repository.RoleRepository;
 import graduation.repository.UserRepository;
 import graduation.util.RegexUtil;
@@ -22,6 +24,8 @@ public class LoginController {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    CheckLoginRepository checkLoginRepository;
 
     @RequestMapping(value = "login",method = RequestMethod.POST)
     @ResponseBody
@@ -30,24 +34,54 @@ public class LoginController {
                           @RequestParam(value = "password") String password,
                           HttpServletRequest request){
         //check format email
+//        System.out.println("Login>>>>>>>>>>>>> " + email + "---" + password);
         if (!RegexUtil.validateEmail(email)) {
             return String.valueOf(LoginConst.EMAIL_ERROR);
         }
+
         HttpSession session = request.getSession();
         UserEntity user = userRepository.findByEmail(email);
         if (user == null) {
             return String.valueOf(LoginConst.EMAIL_ERROR);
         }
 
+        //check can login
+        CheckLoginEntity checkLoginEntity = checkLoginRepository.findById(user.getId());
+        if (checkLoginEntity != null) {
+            long timeNow = System.currentTimeMillis();
+            //check lock in 1 day
+            if (timeNow - checkLoginEntity.getLastLogin() >= LoginConst.TIME_LOCK_USER) {
+                checkLoginEntity.setLastLogin(timeNow);
+                checkLoginEntity.setNumberLoginFail(0);
+                checkLoginRepository.save(checkLoginEntity);
+            }
+            else if (checkLoginEntity.getNumberLoginFail() >= LoginConst.NUMER_MAX_LOGIN_FAIL) {
+                return String.valueOf(LoginConst.LOCKED_USER);
+            }
+        }
+        else {
+            checkLoginEntity = new CheckLoginEntity();
+            checkLoginEntity.setId(user.getId());
+            checkLoginEntity.setNumberLoginFail(0);
+            checkLoginEntity.setLastLogin(System.currentTimeMillis());
+            checkLoginRepository.save(checkLoginEntity);
+        }
+
         String keyHash = user.getKeyHash();
         String hashedPass = Pbkdf2Encryptor.createHash(password, keyHash, 1000);
         if (!user.getHashedPass().equals(hashedPass)) {
+            checkLoginEntity.setNumberLoginFail(checkLoginEntity.getNumberLoginFail() + 1);
+            checkLoginEntity.setLastLogin(System.currentTimeMillis());
+            checkLoginRepository.save(checkLoginEntity);
             return String.valueOf(LoginConst.PASSWORD_ERROR);
         }
         else if(user.getIsDel().equalsIgnoreCase("false")){
             return String.valueOf(LoginConst.BANNED_USER);
         }
         else {
+            checkLoginEntity.setNumberLoginFail(0);
+            checkLoginEntity.setLastLogin(System.currentTimeMillis());
+            checkLoginRepository.save(checkLoginEntity);
             if(user.getRoleEntity().getId() == roleRepository.findOne(2).getId()){
                 session.setAttribute("user", user);
                 String data= "<div class=\"topbar-child2\">\n" +
