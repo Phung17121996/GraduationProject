@@ -9,5 +9,7 @@ public class LoginConst {
 
     public static final long TIME_LOCK_USER = 86400000; //milisecond
     public static final int NUMER_MAX_LOGIN_FAIL = 5;
+    public static final int NUMER_LOGIN_FAIL = 0;
     public static final int NUMER_MIN_LOGIN_FAIL = 1;
+
 }
